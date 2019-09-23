@@ -86,64 +86,16 @@ class GitalkComponent extends Component {
       this.state.comment = decodeURIComponent(storedComment)
       window.localStorage.removeItem(GT_COMMENT)
     }
-
-    const query = queryParse()
-    if (query.code) {
-      const code = query.code
-      delete query.code
-      const replacedUrl = `${window.location.origin}${window.location.pathname}${queryStringify(query)}${window.location.hash}`
-      history.replaceState(null, null, replacedUrl)
-      this.options = Object.assign({}, this.options, {
-        url: replacedUrl,
-        id: replacedUrl
-      }, props.options)
-
-      axiosJSON.post(this.options.proxy, {
-        code,
-        client_id: this.options.clientID,
-        client_secret: this.options.clientSecret
-      }).then(res => {
-        if (res.data && res.data.access_token) {
-          this.accessToken = res.data.access_token
-
-          this.getInit()
-            .then(() => this.setState({ isIniting: false }))
-            .catch(err => {
-              console.log('err:', err)
-              this.setState({
-                isIniting: false,
-                isOccurError: true,
-                errorMsg: formatErrorMsg(err)
-              })
-            })
-        } else {
-          // no access_token
-          console.log('res.data err:', res.data)
-          this.setState({
-            isOccurError: true,
-            errorMsg: formatErrorMsg(new Error('no access token'))
-          })
-        }
-      }).catch(err => {
-        console.log('err: ', err)
+    this.getInit()
+      .then(() => this.setState({ isIniting: false }))
+      .catch(err => {
+        console.log('err:', err)
         this.setState({
+          isIniting: false,
           isOccurError: true,
           errorMsg: formatErrorMsg(err)
         })
       })
-    } else {
-      this.getInit()
-        .then(() => this.setState({ isIniting: false }))
-        .catch(err => {
-          console.log('err:', err)
-          this.setState({
-            isIniting: false,
-            isOccurError: true,
-            errorMsg: formatErrorMsg(err)
-          })
-        })
-    }
-
     this.i18n = i18n(this.options.language)
   }
   componentDidUpdate () {
@@ -158,14 +110,8 @@ class GitalkComponent extends Component {
     this._accessToken = token
   }
   get loginLink () {
-    const githubOauthUrl = 'http://github.com/login/oauth/authorize'
-    const { clientID } = this.options
-    const query = {
-      client_id: clientID,
-      redirect_uri: window.location.href,
-      scope: 'public_repo'
-    }
-    return `${githubOauthUrl}?${queryStringify(query)}`
+    const query = { origin: window.location.href }
+    return `./auth/start?${queryStringify(query)}`
   }
   get isAdmin () {
     const { admin } = this.options
