@@ -85,24 +85,6 @@ export default class Comment extends Component {
               })}
             </span>
 
-            {reactions && (
-              <a className="gt-comment-like" title="Like" onClick={likeCallback}>
-                {reactions.viewerHasReacted ? (
-                  <Svg
-                    className="gt-ico-heart"
-                    name="heart_on"
-                    text={reactionTotalCount}
-                  />
-                ) : (
-                  <Svg
-                    className="gt-ico-heart"
-                    name="heart"
-                    text={reactionTotalCount}
-                  />
-                )}
-              </a>
-            )}
-
             {enableEdit ? (
               <a
                 href={comment.html_url}

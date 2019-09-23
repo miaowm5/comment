@@ -562,9 +562,6 @@ class GitalkComponent extends Component {
             dangerouslySetInnerHTML={{ __html: previewHtml }}
           />
           <div className="gt-header-controls">
-            <a className="gt-header-controls-tip" href="https://guides.github.com/features/mastering-markdown/" target="_blank">
-              <Svg className="gt-ico-tip" name="tip" text={this.i18n.t('support-markdown')}/>
-            </a>
             {user && <Button
               getRef={this.getRef}
               className="gt-btn-public"
@@ -573,12 +570,6 @@ class GitalkComponent extends Component {
               isLoading={isCreating}
             />}
 
-            <Button
-              className="gt-btn-preview"
-              onMouseDown={this.handleCommentPreview}
-              text={isPreview ? this.i18n.t('edit') : this.i18n.t('preview')}
-              // isLoading={isPreviewing}
-            />
             {!user && <Button className="gt-btn-login" onMouseDown={this.handleLogin} text={this.i18n.t('login-with-github')} />}
           </div>
         </div>
@@ -643,8 +634,6 @@ class GitalkComponent extends Component {
         }}/>
         {isPopupVisible &&
           <div className="gt-popup">
-            {user ? <Action className={`gt-action-sortasc${!isDesc ? ' is--active' : ''}`} onClick={this.handleSort('first')} text={this.i18n.t('sort-asc')}/> : null }
-            {user ? <Action className={`gt-action-sortdesc${isDesc ? ' is--active' : ''}`} onClick={this.handleSort('last')} text={this.i18n.t('sort-desc')}/> : null }
             {user ?
               <Action className="gt-action-logout" onClick={this.handleLogout} text={this.i18n.t('logout')}/> :
               <a className="gt-action gt-action-login" onMouseDown={this.handleLogin}>{this.i18n.t('login-with-github')}</a>
